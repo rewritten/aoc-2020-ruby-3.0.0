@@ -1,20 +1,31 @@
+# frozen_string_literal: true
+
 require_relative 'support/aoc_test'
-require 'English'
 require 'passport'
 require 'splitter'
 
-class Day04Test < AocTest
-  def setup
-    super
-    @passports = Splitter.new(sep: :blank_line).split(@data).map { Passport.new(_1) }
-    @expected = Set.new(%w[byr iyr eyr hgt hcl ecl pid])
+class Day04Test < Minitest::Test
+  include AocTest
+
+  def day = 4
+
+  def part_one_example_answer = 2
+
+  def part_one_answer = 196
+
+  def part_two_example_answer = 2
+
+  def part_two_answer = 114
+
+  def part_one_response(data)
+    Splitter.new(sep: :blank_line)
+            .split(data)
+            .count { Passport.new(_1).all_fields_present? }
   end
 
-  def test_valid_passports
-    assert_equal 196, @passports.count(&:all_fields_present?)
-  end
-
-  def test_really_valid_passports
-    assert_equal 114, @passports.count(&:valid?)
+  def part_two_response(data)
+    Splitter.new(sep: :blank_line)
+            .split(data)
+            .count { Passport.new(_1).valid? }
   end
 end

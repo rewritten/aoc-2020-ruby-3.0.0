@@ -1,24 +1,34 @@
+# frozen_string_literal: true
+
 require_relative 'support/aoc_test'
 
-class Day03Test < AocTest
-  def setup
-    super
-    @grid = Grid.new(data: @data)
-    @stepper = Stepper.new(max_y: @grid.height)
+class Day03Test < Minitest::Test
+  include AocTest
+
+  def day = 3
+
+  def part_one_example_answer = 7
+
+  def part_one_answer = 195
+
+  def part_two_example_answer = 336
+
+  def part_two_answer = 3_772_314_000
+
+  private
+
+  def part_one_response(data)
+    grid = Grid.new(data: data)
+    stepper = Stepper.new(max_y: grid.height)
+    stepper.each(3, 1).count { grid.tree?(x: _1, y: _2) }
   end
 
-  def test_count_trees
-    trees = @stepper.each(3, 1).count { @grid.tree?(x: _1, y: _2) }
-
-    assert_equal 195, trees
-  end
-
-  def test_count_trees_various_slopes
-    tree_product = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
-                   .map { @stepper.each(_1, _2).count { |x, y| @grid.tree?(x: x, y: y) } }
-                   .reduce(&:*)
-
-    assert_equal 3_772_314_000, tree_product
+  def part_two_response(data)
+    grid = Grid.new(data: data)
+    stepper = Stepper.new(max_y: grid.height)
+    [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
+      .map { |r, d| stepper.each(r, d).count { grid.tree?(x: _1, y: _2) } }
+      .reduce(&:*)
   end
 
   class Grid
