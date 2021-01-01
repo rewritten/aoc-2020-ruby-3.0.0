@@ -3,6 +3,7 @@ require 'set'
 
 class AocTest < Minitest::Test
   def setup
-    @data = File.read("./data/day_#{self.class.name[/\d+/]}.txt")
+    @data = File.read("./data/#{self.class.name[/\d+/]}/input.txt")
+    @example = File.read("./data/#{self.class.name[/\d+/]}/example.txt")
   end
 end
