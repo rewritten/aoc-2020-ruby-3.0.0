@@ -1,19 +1,23 @@
+# frozen_string_literal: true
+
 require_relative 'support/aoc_test'
 
-class Day01Test < AocTest
-  def test_part_one
-    assert_equal 514_579, product_of_two(@example)
-    assert_equal 319_531, product_of_two(@data)
-  end
+class Day01Test < Minitest::Test
+  include AocTest
 
-  def test_part_two
-    assert_equal 241_861_950, product_of_three(@example)
-    assert_equal 244_300_320, product_of_three(@data)
-  end
+  def day = 1
+
+  def part_one_example_answer = 514_579
+
+  def part_one_answer = 319_531
+
+  def part_two_example_answer = 241_861_950
+
+  def part_two_answer = 244_300_320
 
   private
 
-  def product_of_two(data)
+  def part_one_response(data)
     numbers = Set.new data.each_line.map(&:to_i)
     complements = Set.new(numbers) { 2020 - _1 }
     numbers
@@ -21,7 +25,7 @@ class Day01Test < AocTest
       .then { _1 * (2020 - _1) }
   end
 
-  def product_of_three(data)
+  def part_two_response(data)
     numbers = Set.new data.each_line.map(&:to_i)
     complements = Set.new(numbers) { 2020 - _1 }
     [*numbers]
