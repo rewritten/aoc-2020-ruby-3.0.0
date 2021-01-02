@@ -2,7 +2,6 @@
 
 require_relative 'support/aoc_test'
 require 'passport'
-require 'splitter'
 
 class Day04Test < Minitest::Test
   include AocTest
@@ -18,14 +17,10 @@ class Day04Test < Minitest::Test
   def part_two_answer = 114
 
   def part_one_response(data)
-    Splitter.new(sep: :blank_line)
-            .split(data)
-            .count { Passport.new(_1).all_fields_present? }
+    data.split("\n\n").count { Passport.new(_1).all_fields_present? }
   end
 
   def part_two_response(data)
-    Splitter.new(sep: :blank_line)
-            .split(data)
-            .count { Passport.new(_1).valid? }
+    data.split("\n\n").count { Passport.new(_1).valid? }
   end
 end

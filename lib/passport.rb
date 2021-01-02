@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Passport
 class Passport
   FIELDS = %w[byr iyr eyr hgt hcl ecl pid].freeze

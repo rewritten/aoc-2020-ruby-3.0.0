@@ -3,38 +3,43 @@
 require_relative 'support/aoc_test'
 require 'graph'
 
-class Day07Test < AocTest
-  def setup
-    super
+class Day06Test < Minitest::Test
+  include AocTest
 
-    @graph = Graph.new
-    @lines = @data.lines.flat_map do |line|
+  def day = 7
+
+  def part_one_example_answer = 4
+
+  def part_one_answer = 296
+
+  def part_two_example_answer = 32
+
+  def part_two_answer = 9339
+
+  def part_one_response(data)
+    rules(data) do |g, (container, color, _weight)|
+      g.add_edge(color, container)
+    end.node('shiny gold').traverse.to_a.size - 1
+  end
+
+  def part_two_response(data)
+    rules(data) do |g, (container, color, weight)|
+      g.add_edge(container, color, weight)
+    end.node('shiny gold').weight - 1
+  end
+
+  def rules(data)
+    g = Graph.new
+
+    data.lines.each do |line|
       next [] unless /^(.+) bags contain (\d.+)$/.match(line.strip)
 
       container, content = Regexp.last_match.captures
-      content.scan(/(\d+) (.+?) bags?/).map do |weight, color|
-        [container, color, weight.to_i]
+      content.scan(/(\d+) (\w+ \w+) bags?/).map do |weight, color|
+        yield g, [container, color, weight.to_i]
       end
     end
-  end
 
-  def test_count_shiny_gold
-    @lines.each do |container, color, weight|
-      @graph.add_edge(color, container, weight.to_i)
-    end
-
-    @node = @graph.node('shiny gold')
-
-    assert_equal 296, Set.new(@graph.traverse_breadth_first(@node, false)).size
-  end
-
-  def test_how_namy_total_bags
-    @lines.each do |container, color, weight|
-      @graph.add_edge(container, color, weight.to_i)
-    end
-
-    @node = @graph.node('shiny gold')
-
-    assert_equal 9339, @node.weight - 1
+    g
   end
 end

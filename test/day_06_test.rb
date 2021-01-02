@@ -1,19 +1,28 @@
+# frozen_string_literal: true
+
 require_relative 'support/aoc_test'
-require 'splitter'
+class Day06Test < Minitest::Test
+  include AocTest
 
-class Day06Test < AocTest
-  def setup
-    super
-    @groups = Splitter.new(sep: :blank_line).split(@data)
+  def day = 6
+
+  def part_one_example_answer = 11
+
+  def part_one_answer = 6457
+
+  def part_two_example_answer = 6
+
+  def part_two_answer = 3260
+
+  def part_one_response(data)
+    data.split("\n\n")
+        .map { (_1.chars & [*'a'..'z']).count }
+        .sum
   end
 
-  def test_any_answer_count
-    counts = @groups.map { _1.chars.tally.slice(*'a'..'z').count }.sum
-    assert_equal 6457, counts
-  end
-
-  def test_all_answer_count
-    counts = @groups.map { _1.lines.map(&:chars).reduce(&:&).tally.slice(*'a'..'z').count }.sum
-    assert_equal 3260, counts
+  def part_two_response(data)
+    data.split("\n\n")
+        .map { _1.lines.map(&:chars).reduce([*'a'..'z'], &:&).count }
+        .sum
   end
 end
