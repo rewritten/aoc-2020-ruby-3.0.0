@@ -1,0 +1,44 @@
+#! /bin/sh
+day_dir=`printf %02d $2`
+
+mkdir -p lib/aoc/$1/$day_dir
+
+if [ ! -f lib/aoc/$1/$day_dir/README.md ]; then
+  curl https://adventofcode.com/$1/day/$2 -v -s --cookie "session=$SESSION" \
+    | nokogiri -e 'puts $_.css("article")' \
+    | pandoc -f html -t markdown \
+    > lib/aoc/$1/$day_dir/README.md
+fi
+
+if [ ! -f lib/aoc/$1/$day_dir/input.txt ]; then
+  curl https://adventofcode.com/$1/day/$2/input -v -s --cookie "session=$SESSION" \
+    > lib/aoc/$1/$day_dir/input.txt
+fi
+
+if [ ! -f lib/aoc/$1/$day_dir/solution.rb ]; then
+  cat << RUBY > lib/aoc/$1/$day_dir/solution.rb
+# frozen_string_literal: true
+
+require 'aoc/auto_test'
+
+module Aoc
+  module Y$1
+    class D$day_dir
+      include Aoc::AutoTest[example: [nil, nil], input: [nil, nil]]
+
+      def initialize(data)
+        @data = data
+      end
+
+      def part_one
+      end
+
+      def part_two
+      end
+    end
+  end
+end
+
+RUBY
+
+fi
