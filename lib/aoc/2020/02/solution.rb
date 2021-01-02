@@ -1,29 +1,30 @@
 # frozen_string_literal: true
 
-class Solution
-  def initialize(data)
-    @data = data
-  end
+require 'aoc/auto_test'
+module Aoc
+  module Y2020
+    class D02
+      include Aoc::AutoTest[example: [2, 1], input: [636, 588]]
 
-  def part_one
-    count_valid_passwords(@data) do |num1, num2, letter, password|
-      password.count(letter).then { _1 >= num1 && _1 <= num2 }
-    end
-  end
+      def initialize(data)
+        @passwords = data.each_line.map do |line|
+          range, letter, pw = line.split
 
-  def part_two
-    count_valid_passwords(@data) do |num1, num2, letter, password|
-      (password[num1 - 1] != letter) ^ (password[num2 - 1] != letter)
-    end
-  end
+          [*range.split('-').map(&:to_i), letter[0], pw]
+        end
+      end
 
-  private
+      def part_one
+        @passwords.count do |num1, num2, letter, password|
+          (num1..num2).cover? password.count(letter)
+        end
+      end
 
-  def count_valid_passwords(data, &strategy)
-    data.each_line.count do |line|
-      range, letter, pw = line.split
-
-      strategy.call(*range.split('-').map(&:to_i), letter[0], pw)
+      def part_two
+        @passwords.count do |num1, num2, letter, password|
+          (password[num1 - 1] != letter) ^ (password[num2 - 1] != letter)
+        end
+      end
     end
   end
 end

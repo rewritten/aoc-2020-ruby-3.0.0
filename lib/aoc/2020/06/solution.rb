@@ -1,15 +1,22 @@
 # frozen_string_literal: true
 
-class Solution
-  def initialize(data)
-    @data = data.split("\n\n")
-  end
+require 'aoc/auto_test'
+module Aoc
+  module Y2020
+    class D06
+      include Aoc::AutoTest[example: [11, 6], input: [6457, 3260]]
 
-  def part_one
-    @data.map { (_1.chars & [*'a'..'z']).count }.sum
-  end
+      def initialize(data)
+        @data = data.split("\n\n")
+      end
 
-  def part_two
-    @data.map { _1.lines.map(&:chars).reduce([*'a'..'z'], &:&).count }.sum
+      def part_one
+        @data.map { (_1.chars & [*'a'..'z']).count }.sum
+      end
+
+      def part_two
+        @data.map { _1.lines.map(&:chars).reduce([*'a'..'z'], &:&).count }.sum
+      end
+    end
   end
 end
