@@ -3,7 +3,7 @@
 require_relative 'support/aoc_test'
 require 'graph'
 
-class Day06Test < Minitest::Test
+class Day07Test < Minitest::Test
   include AocTest
 
   def day = 7
