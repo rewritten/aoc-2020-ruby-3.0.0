@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rake/testtask'
-require 'minitest/test'
 
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
