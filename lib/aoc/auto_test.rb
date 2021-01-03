@@ -17,6 +17,28 @@ module Aoc
       end
     end
 
+    def self.included(base)
+      base.const_set :Test, Class.new(Minitest::Test)
+      base.extend ClassMethods
+    end
+
+    module ClassMethods
+      def assert_example(data:, label: 'example', **example_expectation)
+        this = self
+        example_expectation.each do |part, result|
+          const_get(:Test).define_method("test_#{label}_#{part}_is_#{result}") do
+            solution = this.new(data)
+
+            assert_equal result, solution.send(part)
+          end
+        end
+      end
+
+      def assert_solution(**args)
+        assert_example(label: 'solution', **args)
+      end
+    end
+
     def self.[](**expectations)
       dir = File.dirname caller_locations.first.absolute_path
       Module.new do
