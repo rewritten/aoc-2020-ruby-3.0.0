@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'aoc/auto_test'
+require 'set'
 
 module Aoc
   module Y2020
@@ -23,11 +24,12 @@ module Aoc
       end
 
       def part_one
-        Game.new(@data).play.drop(2019).first
+        # Game.new(@data).play.drop(2019).first
+        Game.new(@data).play(2020)
       end
 
       def part_two
-        Game.new(@data).play.drop(30_000_000 - 1).first
+        Game.new(@data).play(30_000_000)
       end
 
       class Game
@@ -36,20 +38,18 @@ module Aoc
           @seed = seed
         end
 
-        def play
-          return enum_for(:play).lazy unless block_given?
-
+        def play(turns)
           next_to_say = 0
 
           @seed.each_with_index do |elm, idx|
-            yield elm
             next_to_say = mark_said(elm, idx)
           end
 
-          (@seed.size..).each do |turn|
-            yield next_to_say
+          (@seed.size...turns - 1).each do |turn|
             next_to_say = mark_said(next_to_say, turn)
           end
+
+          next_to_say
         end
 
         private
