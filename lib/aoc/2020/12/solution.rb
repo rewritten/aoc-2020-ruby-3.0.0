@@ -5,10 +5,15 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D12
-      include Aoc::AutoTest[example: [25, 286], input: [1687, 20_873]]
+      include Aoc::AutoTest
+
+      example part_one: 25, part_two: 286, data: 'F10 N3 F7 R90 F11'
+
+      solution part_one: 1687,
+               part_two: 20_873
 
       def initialize(data)
-        @data = data.lines.map do
+        @data = data.split.map do
           _1.split(/(?<=\D)(?=\d)/) => [dir, num]
           [dir.downcase, num.to_i]
         end

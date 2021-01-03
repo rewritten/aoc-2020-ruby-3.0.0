@@ -4,7 +4,28 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D06
-      include Aoc::AutoTest[example: [11, 6], input: [6457, 3260]]
+      include Aoc::AutoTest
+
+      example part_one: 11, part_two: 6, data: <<~TXT
+        abc
+
+        a
+        b
+        c
+
+        ab
+        ac
+
+        a
+        a
+        a
+        a
+
+        b
+      TXT
+
+      solution part_one: 6457,
+               part_two: 3260
 
       def initialize(data)
         @data = data.split("\n\n")

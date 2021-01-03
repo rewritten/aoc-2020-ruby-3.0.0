@@ -23,19 +23,21 @@ module Aoc
     end
 
     module ClassMethods
-      def assert_example(data:, label: 'example', **example_expectation)
+      def example(data: nil, file: nil, label: 'example', opts: {}, **example_expectation)
+        data ||= File.read(file)
         this = self
         example_expectation.each do |part, result|
           const_get(:Test).define_method("test_#{label}_#{part}_is_#{result}") do
-            solution = this.new(data)
+            solution = this.new(data, **opts)
 
             assert_equal result, solution.send(part)
           end
         end
       end
 
-      def assert_solution(**args)
-        assert_example(label: 'solution', **args)
+      def solution(**args)
+        input = File.read("#{File.dirname(caller_locations.first.absolute_path)}/input.txt")
+        example(label: 'solution', data: input, **args)
       end
     end
 

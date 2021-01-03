@@ -5,16 +5,23 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D09
-      include Aoc::AutoTest[input: [10_884_537, 1_261_309]]
+      include Aoc::AutoTest
 
-      def initialize(data)
-        @data = data.lines.map(&:to_i)
+      example part_one: 127,
+              part_two: 62,
+              opts: { buffer: 5 },
+              data: '35 20 15 25 47 40 62 55 65 95 102 117 150 182 127 219 299 277 309 576'
+
+      solution part_one: 10_884_537,
+               part_two: 1_261_309
+
+      def initialize(data, buffer: 25)
+        @data = data.split.map(&:to_i)
+        @buffer = buffer
       end
 
-      def buffer = 25
-
       def part_one
-        queue = Q.new(buffer)
+        queue = Q.new(@buffer)
 
         @data.each do |num|
           break num unless queue.valid?(num)
@@ -34,12 +41,6 @@ module Aoc
           break found if found
         end
       end
-    end
-
-    class D09Example < D09
-      include Aoc::AutoTest[example: [127, 62]]
-
-      def buffer = 5
     end
 
     class Q

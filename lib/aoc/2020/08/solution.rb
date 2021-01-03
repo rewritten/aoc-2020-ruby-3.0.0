@@ -6,7 +6,22 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D08
-      include Aoc::AutoTest[example: [5, 8], input: [1671, 892]]
+      include Aoc::AutoTest
+
+      example part_one: 5, part_two: 8, data: <<~TXT
+      nop +0
+      acc +1
+      jmp +4
+      acc +3
+      jmp -3
+      acc -99
+      acc +1
+      jmp -4
+      acc +6
+      TXT
+
+      solution part_one: 1671,
+               part_two: 892
 
       def initialize(data)
         @instructions = data.each_line.map do

@@ -5,7 +5,15 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D13
-      include Aoc::AutoTest[example: [295, 1_068_781], input: [6568, 554_865_447_501_099]]
+      include Aoc::AutoTest
+
+      example part_one: 295, part_two: 1_068_781, data: <<~TXT
+      939
+      7,13,x,x,59,x,31,19
+      TXT
+
+      solution part_one: 6568,
+               part_two: 554_865_447_501_099
 
       def initialize(data)
         data.lines => [ts, buses]

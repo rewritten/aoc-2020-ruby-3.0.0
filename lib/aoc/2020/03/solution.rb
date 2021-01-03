@@ -4,7 +4,24 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D03
-      include Aoc::AutoTest[example: [7, 336], input: [195, 3_772_314_000]]
+      include Aoc::AutoTest
+
+      example part_one: 7, part_two: 336, data: <<~TXT
+        ..##.......
+        #...#...#..
+        .#....#..#.
+        ..#.#...#.#
+        .#...##..#.
+        ..#.##.....
+        .#.#.#....#
+        .#........#
+        #.##...#...
+        #...##....#
+        .#..#...#.#
+      TXT
+
+      solution part_one: 195,
+               part_two: 3_772_314_000
 
       def initialize(data)
         @data = data.lines.map(&:strip)

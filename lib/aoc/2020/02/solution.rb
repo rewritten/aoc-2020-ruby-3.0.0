@@ -4,7 +4,16 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D02
-      include Aoc::AutoTest[example: [2, 1], input: [636, 588]]
+      include Aoc::AutoTest
+
+      example part_one: 2, part_two: 1, data: <<~TXT
+        1-3 a: abcde
+        1-3 b: cdefg
+        2-9 c: ccccccccc
+      TXT
+
+      solution part_one: 636,
+               part_two: 588
 
       def initialize(data)
         @passwords = data.each_line.map do |line|

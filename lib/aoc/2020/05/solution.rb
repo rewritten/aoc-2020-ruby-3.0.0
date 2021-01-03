@@ -5,7 +5,10 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D05
-      include Aoc::AutoTest[input: [816, 539]]
+      include Aoc::AutoTest
+
+      solution part_one: 816,
+               part_two: 539
 
       def initialize(data)
         @seats = Set.new(data.each_line) { _1.strip.tr('BFRL', '1010').to_i(2) }

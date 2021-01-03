@@ -6,10 +6,17 @@ require 'aoc/auto_test'
 module Aoc
   module Y2020
     class D01
-      include Aoc::AutoTest[example: [514_579, 241_861_950], input: [319_531, 244_300_320]]
+      include Aoc::AutoTest
+
+      example part_one: 514_579,
+              part_two: 241_861_950,
+              data: '1721 979 366 299 675 1456'
+
+      solution part_one: 319_531,
+               part_two: 244_300_320
 
       def initialize(data)
-        @numbers = Set.new data.each_line.map(&:to_i)
+        @numbers = Set.new data.split.map(&:to_i)
         @complements = Set.new(@numbers) { 2020 - _1 }
       end
 
