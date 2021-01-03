@@ -12,7 +12,7 @@ module Aoc
       solution part_one: 2400,
                part_two: 338_510_590_509_056
 
-               def initialize(data)
+      def initialize(data)
         @data = data.split.map(&:to_i).sort
         @data = [0, *@data, @data.last + 3]
       end

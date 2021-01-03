@@ -8,8 +8,8 @@ module Aoc
       include Aoc::AutoTest
 
       example part_one: 295, part_two: 1_068_781, data: <<~TXT
-      939
-      7,13,x,x,59,x,31,19
+        939
+        7,13,x,x,59,x,31,19
       TXT
 
       solution part_one: 6568,

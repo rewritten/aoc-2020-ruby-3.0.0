@@ -9,15 +9,15 @@ module Aoc
       include Aoc::AutoTest
 
       example part_one: 5, part_two: 8, data: <<~TXT
-      nop +0
-      acc +1
-      jmp +4
-      acc +3
-      jmp -3
-      acc -99
-      acc +1
-      jmp -4
-      acc +6
+        nop +0
+        acc +1
+        jmp +4
+        acc +3
+        jmp -3
+        acc -99
+        acc +1
+        jmp -4
+        acc +6
       TXT
 
       solution part_one: 1671,
