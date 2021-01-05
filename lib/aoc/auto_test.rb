@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
+require 'benchmark'
 
 module Aoc
   module AutoTest
@@ -38,6 +39,23 @@ module Aoc
       def solution(**args)
         input = File.read("#{File.dirname(caller_locations.first.absolute_path)}/input.txt")
         example(label: 'solution', data: input, **args)
+      end
+
+      def bench(meth)
+        prepend(Module.new do
+          module_eval <<~RUBY, __FILE__, __LINE__ + 1
+            # def method_to_benchmark(...)
+            #   result = nil
+            #   puts __method__, Benchmark.measure(__method__.to_s) { result = super }
+            #   result
+            # end
+            def #{meth}(...)
+              result = nil
+              puts __method__, Benchmark.measure(__method__.to_s) { result = super }
+              result
+            end
+          RUBY
+        end)
       end
     end
 
