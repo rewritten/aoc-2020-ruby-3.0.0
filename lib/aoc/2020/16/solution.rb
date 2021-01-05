@@ -7,9 +7,6 @@ module Aoc
     class D16
       include Aoc::AutoTest
 
-      bench :uniquify
-      bench :find_rules_for_columns
-
       example part_one: 71, data: <<~TEXT
         class: 1-3 or 5-7
         row: 6-11 or 33-44

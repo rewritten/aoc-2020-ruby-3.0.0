@@ -1,0 +1,26 @@
+#! env ruby
+# frozen_string_literal: true
+
+# Aoc::Y2020::D17::Test#test_example_part_one_is_112 = 0.01 s = .
+RE = /\AAoc::Y(\d+)::D(\d+)::Test#(\S+) = ([\d.]+ s) = (\.)\Z/
+
+File.open('timings.md', 'w') do |f|
+  f << <<~TEXT
+    # Timings
+
+    Run `ruby bin/time` to update this file
+
+    | Year | Day | Test | Time | Success |
+    |------|-----|------|------|---------|
+  TEXT
+
+  timings = `rake`
+  timings.lines.each do |line|
+    # Aoc::Y2020::D17::Test#test_example_part_one_is_112 = 0.01 s = .
+    puts line
+    next unless (match = RE.match line)
+
+
+    f.puts "| #{match.captures.join(' | ')} |"
+  end
+end
