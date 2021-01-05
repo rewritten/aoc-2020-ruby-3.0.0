@@ -14,13 +14,10 @@ File.open('timings.md', 'w') do |f|
     |------|-----|------|------|---------|
   TEXT
 
-  timings = `rake`
-  timings.lines.each do |line|
-    # Aoc::Y2020::D17::Test#test_example_part_one_is_112 = 0.01 s = .
-    puts line
-    next unless (match = RE.match line)
-
-
-    f.puts "| #{match.captures.join(' | ')} |"
-  end
+  `rake`.lines
+        .map { RE.match _1 }
+        .compact
+        .map(&:captures)
+        .sort_by { |capture| [-capture[3].to_f, capture] }
+        .each { |capture| f.puts "| #{capture.join(' | ')} |" }
 end
