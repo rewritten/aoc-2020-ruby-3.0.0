@@ -23,7 +23,7 @@ module Aoc
         10
       TEXT
 
-      solution part_one: 31308, part_two: 33647
+      solution part_one: 31_308, part_two: 33_647
 
       def initialize(data)
         @data = data.split("\n\n").map { |t| t.split(':').last.scan(/\d+/).map(&:to_i) }
