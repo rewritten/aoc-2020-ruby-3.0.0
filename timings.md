@@ -4,25 +4,24 @@ Run `ruby bin/time` to update this file
 
 | Year | Day | Test | Time | Success |
 |------|-----|------|------|---------|
-| 2020 | 15 | test_solution_part_two_is_352 | 4.20 s | . |
-| 2020 | 11 | test_solution_part_two_is_1897 | 2.89 s | . |
-| 2020 | 11 | test_solution_part_one_is_2108 | 1.91 s | . |
-| 2020 | 19 | test_solution_part_two_is_359 | 1.40 s | . |
+| 2020 | 15 | test_solution_part_two_is_352 | 4.04 s | . |
+| 2020 | 11 | test_solution_part_two_is_1897 | 2.93 s | . |
+| 2020 | 11 | test_solution_part_one_is_2108 | 1.85 s | . |
 | 2020 | 17 | test_solution_part_two_is_1836 | 0.52 s | . |
-| 2020 | 17 | test_example_part_two_is_848 | 0.23 s | . |
+| 2020 | 17 | test_example_part_two_is_848 | 0.21 s | . |
 | 2020 | 14 | test_solution_part_two_is_2737766154126 | 0.15 s | . |
-| 2020 | 18 | test_solution_part_two_is_55699621957369 | 0.11 s | . |
+| 2020 | 18 | test_solution_part_two_is_55699621957369 | 0.09 s | . |
 | 2020 | 18 | test_solution_part_one_is_3159145843816 | 0.06 s | . |
-| 2020 | 19 | test_example_with_partial_cache_part_two_is_12 | 0.05 s | . |
+| 2020 | 17 | test_solution_part_one_is_324 | 0.04 s | . |
 | 2020 | 16 | test_solution_part_two_is_3709435214239 | 0.03 s | . |
-| 2020 | 17 | test_solution_part_one_is_324 | 0.03 s | . |
+| 2020 | 06 | test_solution_part_two_is_3260 | 0.02 s | . |
 | 2020 | 07 | test_solution_part_one_is_296 | 0.02 s | . |
-| 2020 | 11 | test_example_part_two_is_26 | 0.02 s | . |
-| 2020 | 02 | test_solution_part_two_is_588 | 0.01 s | . |
-| 2020 | 06 | test_solution_part_two_is_3260 | 0.01 s | . |
+| 2020 | 07 | test_solution_part_two_is_9339 | 0.01 s | . |
 | 2020 | 08 | test_solution_part_two_is_892 | 0.01 s | . |
 | 2020 | 09 | test_solution_part_two_is_1261309 | 0.01 s | . |
 | 2020 | 11 | test_example_part_one_is_37 | 0.01 s | . |
+| 2020 | 11 | test_example_part_two_is_26 | 0.01 s | . |
+| 2020 | 12 | test_solution_part_one_is_1687 | 0.01 s | . |
 | 2020 | 16 | test_solution_part_one_is_21956 | 0.01 s | . |
 | 2020 | 17 | test_example_part_one_is_112 | 0.01 s | . |
 | 2020 | 19 | test_solution_part_one_is_250 | 0.01 s | . |
@@ -33,6 +32,7 @@ Run `ruby bin/time` to update this file
 | 2020 | 02 | test_example_part_one_is_2 | 0.00 s | . |
 | 2020 | 02 | test_example_part_two_is_1 | 0.00 s | . |
 | 2020 | 02 | test_solution_part_one_is_636 | 0.00 s | . |
+| 2020 | 02 | test_solution_part_two_is_588 | 0.00 s | . |
 | 2020 | 03 | test_example_part_one_is_7 | 0.00 s | . |
 | 2020 | 03 | test_example_part_two_is_336 | 0.00 s | . |
 | 2020 | 03 | test_solution_part_one_is_195 | 0.00 s | . |
@@ -48,7 +48,6 @@ Run `ruby bin/time` to update this file
 | 2020 | 06 | test_solution_part_one_is_6457 | 0.00 s | . |
 | 2020 | 07 | test_example_part_one_is_4 | 0.00 s | . |
 | 2020 | 07 | test_example_part_two_is_32 | 0.00 s | . |
-| 2020 | 07 | test_solution_part_two_is_9339 | 0.00 s | . |
 | 2020 | 08 | test_example_part_one_is_5 | 0.00 s | . |
 | 2020 | 08 | test_example_part_two_is_8 | 0.00 s | . |
 | 2020 | 08 | test_solution_part_one_is_1671 | 0.00 s | . |
@@ -61,7 +60,6 @@ Run `ruby bin/time` to update this file
 | 2020 | 10 | test_solution_part_two_is_338510590509056 | 0.00 s | . |
 | 2020 | 12 | test_example_part_one_is_25 | 0.00 s | . |
 | 2020 | 12 | test_example_part_two_is_286 | 0.00 s | . |
-| 2020 | 12 | test_solution_part_one_is_1687 | 0.00 s | . |
 | 2020 | 12 | test_solution_part_two_is_20873 | 0.00 s | . |
 | 2020 | 13 | test_example_part_one_is_295 | 0.00 s | . |
 | 2020 | 13 | test_example_part_two_is_1068781 | 0.00 s | . |
@@ -87,3 +85,5 @@ Run `ruby bin/time` to update this file
 | 2020 | 18 | test_example_part_two_is_669060 | 0.00 s | . |
 | 2020 | 19 | test_example_part_one_is_2 | 0.00 s | . |
 | 2020 | 19 | test_example_with_partial_cache_part_one_is_3 | 0.00 s | . |
+| 2020 | 19 | test_example_with_partial_cache_part_two_is_12 | 0.00 s | . |
+| 2020 | 19 | test_solution_part_two_is_359 | 0.00 s | . |

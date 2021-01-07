@@ -27,34 +27,20 @@ module Aoc
       end
 
       def part_one
-        @input.lines.count { check(_1.strip, 0) }
+        @input.lines.grep(/\A#{build_re(0)}\Z/).count
       end
 
       def part_two
-        init_rules <<~TEXT
-          8: 42 | 42 8
-          11: 42 31 | 42 11 31
-        TEXT
-
-        part_one
+        @input
+          .lines
+          .grep(/\A(#{build_re(42)}+)(#{build_re(31)}+)\Z/) { Regexp.last_match.captures }
+          .count { _1.length > _2.length }
       end
 
       private
 
-      def check_seq(str, indices)
-        case indices
-          in [n]
-            check(str, n)
-          in [n, *rest]
-            (1...str.length).any? { check(str[0..._1], n) && check_seq(str[_1..], rest) }
-        end
-      end
-
-      def check(str, rule_index)
-        return false if str.empty?
-        return @strings_cache[rule_index].include?(str) if @strings_cache[rule_index]
-
-        @rules[rule_index].any? { check_seq(str, _1) }
+      def build_re(n)
+        "(?:#{@strings_cache[n]&.join('|') || @rules[n].map { |seq| seq.map { build_re _1 }.join }.join('|')})"
       end
 
       def init_rules(data)
@@ -67,11 +53,6 @@ module Aoc
               definition.split(' | ').map { _1.scan(/\d+/).map(&:to_i) }
             end
         end
-      end
-
-      def init_strings(initial)
-        @strings_cache ||= []
-        strings(initial)
       end
 
       def strings(n)
