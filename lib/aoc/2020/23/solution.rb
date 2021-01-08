@@ -7,66 +7,55 @@ module Aoc
     class D23
       include Aoc::AutoTest
 
-      example part_one: '67384529', data: '389125467'
-      example part_two: 149_245_887_792, data: '389125467'
-
-      solution part_one: '46978532', part_two: 163_035_127_721
+      solution part_one: '46978532'
+      solution part_two: 163_035_127_721
 
       def initialize(data)
         @data = data.chomp.chars.map(&:to_i)
-        @by_index = []
-      end
+        @next = @data.each_cons(2).with_object([]) do |(prv, nxt), acc|
+          acc[prv] = nxt
+        end
 
-      Node = Struct.new(:label, :nxt)
+        @current = @next[@data.last] = @data.first
+      end
 
       def part_one
         @mod = 9
-        prepare
+
         100.times { round }
 
-        @current = @by_index[1]
-
-        8.times.map do
-          @current = @current.nxt
-          @current.label
-        end.join
+        8.times.each_with_object([1]) { _2 << @next[_2.last] }.drop(1).join
       end
 
       def part_two
         @mod = 1_000_000
-        prepare
+
+        @next.map! { _1 == @current ? 10 : _1 }
+        @next = [*@next, *11..@mod, @current]
+
         10_000_000.times { round }
 
-        @by_index[1].nxt.label * @by_index[1].nxt.nxt.label
+        2.times.each_with_object([1]) { _2 << @next[_2.last] }.drop(1).reduce(&:*)
       end
 
       private
 
-      def prepare
-        @data += [*10..@mod]
-
-        n = Node.new
-
-        final = @data.reduce(n) do |node, label|
-          @by_index[label] = node.nxt = Node.new(label)
-        end
-
-        @current = final.nxt = n.nxt
-      end
-
+      # I cannot seem to do better - 5 reads and 2 writes per cycle
+      # ~3.00 seconds for part 2
       def round
-        pickup = [@current.nxt, @current.nxt.nxt, @current.nxt.nxt.nxt]
+        x = @next[@current]
+        y = @next[x]
+        z = @next[y]
+        d = @next[z]
 
-        dest_label = (@current.label - 2) % @mod + 1
+        dest = (@current - 2) % @mod + 1
+        dest = (dest - 2) % @mod + 1 while dest == x || dest == y || dest == z
 
-        dest_label = (dest_label - 2) % @mod + 1 while pickup.any? { _1.label == dest_label }
+        @next[@current] = d
+        @next[z] = @next[dest]
+        @next[dest] = x
 
-        @current.nxt = pickup.last.nxt
-
-        pickup.last.nxt = @by_index[dest_label].nxt
-        @by_index[dest_label].nxt = pickup.first
-
-        @current = @current.nxt
+        @current = d
       end
     end
   end
