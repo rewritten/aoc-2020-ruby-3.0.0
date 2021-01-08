@@ -18,6 +18,6 @@ File.open('timings.md', 'w') do |f|
         .map { RE.match _1 }
         .compact
         .map(&:captures)
-        .sort_by { |capture| [-capture[3].to_f, capture] }
+        .sort
         .each { |capture| f.puts "| #{capture.join(' | ')} |" }
 end
