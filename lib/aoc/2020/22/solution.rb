@@ -23,56 +23,107 @@ module Aoc
         10
       TEXT
 
-      solution part_one: 31_308, part_two: 33_647
+      solution part_one: 31_308
+      solution part_two: 33_647
 
       def initialize(data)
         @data = data.split("\n\n").map { |t| t.split(':').last.scan(/\d+/).map(&:to_i) }
       end
 
       def part_one
-        recursive_combat(*@data) { _2 > _1 ? 2 : 1 }
-          .then { score _2 }
+        combat(@data) => [winner, hand]
+        score hand
       end
 
       def part_two
-        recursive_combat(*@data) { who_wins_recursive? _1, _2, _3, _4 }
-          .then { score _2 }
+        combat(@data, recursive: true) => [winner, hand]
+        score hand
       end
 
       private
 
+      def hand(links, pos, limit = nil)
+        c = links[pos]
+
+        d = []
+
+        until d.include?(c) || d.length == limit
+          d << c
+          c = links[c]
+        end
+
+        d
+      end
+
+
+      def display(links, pos)
+        puts hand(links, pos).join(' -> ')
+      end
+
+      def links_from(hands)
+        t = []
+        hands.each do |player|
+          player.zip(player.rotate).each { t[_1] = _2 }
+        end
+        t
+      end
+
       def score(deck) = deck.reverse.map.with_index(1) { _1 * _2 }.sum
 
-      def recursive_combat(deck1, deck2, &block)
+      def combat(hands, recursive: false)
         seen = Set.new
+
+        len1, len2 = hands.map(&:length)
+        left, right = hands.map(&:last)
+
+        links = links_from(hands)
+
         loop do
-          break [1, deck1] unless seen.add?(deck1 + [0] + deck2)
+          break [1, left] unless seen.add? links.hash
+          play1 = links[left]
+          play2 = links[right]
+          next1 = links[play1]
+          next2 = links[play2]
 
-          round(deck1, deck2, &block)
+          result =
+            if recursive && play1 < len1 && play2 < len2
+              hand1 = hand(links, play1, play1)
+              hand2 = hand(links, play2, play2)
+              combat([hand1, hand2], recursive: true).first
+            else
+              play1 > play2 ? 1 : 2
+            end
 
-          break [2, deck2] if deck1.empty?
-          break [1, deck1] if deck2.empty?
-        end
-      end
+          if result == 1
+            links[left] = play1
+            links[play1] = play2
+            links[play2] = next1
 
-      def round(deck1, deck2)
-        play1 = deck1.shift
-        play2 = deck2.shift
+            left = play2
 
-        case yield(play1, play2, deck1, deck2)
-        when 2 then deck2 << play2 << play1
-        when 1 then deck1 << play1 << play2
-        end
-      end
+            len1 += 1
+            len2 -= 1
 
-      def who_wins?(play1, play2) = play2 > play1 ? 2 : 1
+            break [1, left] if len2.zero?
 
-      def who_wins_recursive?(play1, play2, deck1, deck2)
-        if deck1.size < play1 || deck2.size < play2
-          play2 > play1 ? 2 : 1
-        else
-          recursive_combat(deck1[0...play1].dup, deck2[0...play2].dup, &method(__method__)).first
-        end
+            links[right] = next2
+          else
+            links[right] = play2
+            links[play2] = play1
+            links[play1] = next2
+
+            right = play1
+
+            len2 += 1
+            len1 -= 1
+
+            break [2, right] if len1.zero?
+
+            links[left] = next1
+          end
+        end => [player, pos]
+
+        [player, hand(links, pos)]
       end
     end
   end
