@@ -21,8 +21,8 @@ module Aoc
         L.LLLLL.LL
       TXT
 
-      solution part_one: 2108,
-               part_two: 1897
+      solution part_one: 2108
+      solution part_two: 1897
 
       def initialize(data)
         @seats = Set.new
@@ -35,79 +35,59 @@ module Aoc
 
         @max_x = data.lines.first.strip.size
         @max_y = data.lines.size
-
-        @visible_neighbours_cache = populate_by_sight(@seats)
-        @neighbours_cache = populate_by_touch(@seats)
       end
 
       def part_one
-        board_ferry(
-          occupy: ->(seat, available) { neighbors(seat).count { available.include? _1 } < 4 },
-          keep_free: ->(seat, occupied) { neighbors(seat).any? { occupied.include? _1 } }
-        )
+        @cache = populate_by(@seats, &TOUCH)
+        board_ferry(3)
       end
 
       def part_two
-        board_ferry(
-          occupy: ->(seat, available) { visible_neighbours(seat).count { available.include? _1 } < 5 },
-          keep_free: ->(seat, occupied) { visible_neighbours(seat).any? { occupied.include? _1 } }
-        )
+        @cache = populate_by(@seats, &SIGHT)
+        board_ferry(4)
       end
 
       private
 
-      DIRECTIONS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]].freeze
-
-      def board_ferry(occupy:, keep_free:)
+      def board_ferry(max_nearby_occupation)
         available = Set.new(@seats)
         occupied = Set.new
 
         loop do
-          to_be_occupied = available.select { |seat| occupy.call(seat, available) }
+          incl = available.method(:include?)
+          to_be_occupied = available.select { (@cache[_1]).count(&incl) <= max_nearby_occupation }
 
           occupied += to_be_occupied
 
           return occupied.size if to_be_occupied.empty?
 
-          to_be_kept_free = available.select { |seat| keep_free.call(seat, occupied) }
+          to_be_kept_free = available.select { |seat| @cache[seat].intersect? occupied }
 
           available -= to_be_kept_free
           available -= to_be_occupied
         end
       end
 
-      def populate_by_sight(seats)
-        Hash[seats.map do |seat|
-          [seat, DIRECTIONS.map do |direction|
-            (1..).lazy
-                 .map { |d| move(seat, direction, d) }
-                 .take_while { in_bounds? _1 }
-                 .find { seats.include? _1 }
-          end.compact]
-        end]
+      ROW_FUNS = [:first.to_proc, :last.to_proc, :sum.to_proc, -> { _1.reduce(&:-) }].freeze
+      SIGHT = proc { true }
+      TOUCH = proc { |(a, b), (c, d)| (a - c).abs <= 1 && (b - d).abs <= 1  }
+
+      def populate_by(seats)
+        ROW_FUNS.each_with_object(Hash.new { |h, k| h[k] = Set.new }) do |fun, cache|
+          seats.group_by(&fun).each_value do |row|
+            row.sort.each_cons(2) do |x, y|
+              next unless yield x, y
+
+              cache[x].add(y)
+              cache[y].add(x)
+            end
+          end
+        end
       end
 
-      def populate_by_touch(seats)
-        Hash[seats.map do |seat|
-          [seat, DIRECTIONS.map do |direction|
-            (1..).lazy
-                 .map { |d| move(seat, direction, d) }
-                 .take(1)
-                 .find { seats.include? _1 }
-          end.compact]
-        end]
-      end
-
-      def move(from, dir, distance)
-        from => [x, y]
-        dir =>  [dx, dy]
-        [x + distance * dx, y + distance * dy]
-      end
-
-      def in_bounds?(position)
-        position => [nx, ny]
-        nx >= 0 && nx <= @max_x && ny >= 0 && ny <= @max_y
-      end
+      # bench :initialize
+      # bench :populate_by
+      # bench :board_ferry
 
       def will_occupy(seats, seat)
         neighbors(seat).count { seats.include? _1 } < 4
