@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'graph'
-
 require 'aoc/auto_test'
 
 module Aoc
@@ -13,13 +11,11 @@ module Aoc
       solution part_two: 9339
 
       def initialize(data)
-        @edge_data = data.lines.grep(/\A(.+) bags contain (\d.+)\Z/) do
-          container, content = Regexp.last_match.captures
+        @edge_data = []
 
-          content.scan(/(\d+) (\w+ \w+)/).map do |weight, color|
-            [container, color, weight.to_i]
-          end
-        end.flatten(1)
+        data.scan(/(?:(\w+ \w+) bags contain|,) (\d+) (\w+ \w+) bags?/) do |container, weight, color|
+          @edge_data << [container || @edge_data.last.first, color, weight.to_i]
+        end
       end
 
       def part_one
