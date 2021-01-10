@@ -6,23 +6,8 @@ module Aoc
     class D03
       include Aoc::AutoTest
 
-      example part_one: 7, part_two: 336, data: <<~TXT
-        ..##.......
-        #...#...#..
-        .#....#..#.
-        ..#.#...#.#
-        .#...##..#.
-        ..#.##.....
-        .#.#.#....#
-        .#........#
-        #.##...#...
-        #...##....#
-        .#..#...#.#
-      TXT
-
-      solution part_one: 195,
-               part_two: 3_772_314_000
-
+      solution part_one: 195
+      solution part_two: 3_772_314_000
       def initialize(data)
         @data = data.lines.map(&:strip)
         @width = @data.first.size
@@ -36,6 +21,14 @@ module Aoc
           .drop(1)
           .count('#')
       end
+
+      # def initialize(data)
+      #   @data = data.lines.map { |line| line.strip.chars.map { _1 == '#' ? 1 : 0 } }.transpose
+      # end
+
+      # def part_one(rgt = 3, dwn = 1)
+      #   (1..).lazy.map { @data.rotate(_1 * rgt).first[_1 * dwn] }.take_while { _1 }.count(1)
+      # end
 
       def part_two
         [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]

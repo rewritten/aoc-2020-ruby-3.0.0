@@ -35,7 +35,7 @@ module Aoc
 
         10_000_000.times { round }
 
-        2.times.each_with_object([1]) { _2 << @next[_2.last] }.drop(1).reduce(&:*)
+        @next[1] * @next[@next[1]]
       end
 
       private

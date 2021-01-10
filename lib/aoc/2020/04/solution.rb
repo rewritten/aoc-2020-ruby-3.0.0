@@ -6,46 +6,49 @@ module Aoc
     class D04
       include Aoc::AutoTest
 
-      example part_one: 2, part_two: 2, data: <<~TXT
-        ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
-        byr:1937 iyr:2017 cid:147 hgt:183cm
-
-        iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
-        hcl:#cfa07d byr:1929
-
-        hcl:#ae17e1 iyr:2013
-        eyr:2024
-        ecl:brn pid:760753108 byr:1931
-        hgt:179cm
-
-        hcl:#cfa07d eyr:2025 pid:166559648
-        iyr:2011 ecl:brn hgt:59in
-      TXT
-
-      solution part_one: 196,
-               part_two: 114
+      solution part_one: 196
+      solution part_two: 114
 
       def initialize(data)
-        @data = data.split("\n\n").map do |info|
-          Hash[info.strip.split.map { _1.split(':', 2) }].transform_keys(&:to_sym)
-        end
+        @data = data.split("\n\n")
       end
 
+      RE_BASE = /
+        \A(?:
+          pid:(?<pid>\S+)(?:\s+|\z) |
+          byr:(?<byr>\S+)(?:\s+|\z) |
+          eyr:(?<eyr>\S+)(?:\s+|\z) |
+          iyr:(?<iyr>\S+)(?:\s+|\z) |
+          hgt:(?<hgt>\S+)(?:\s+|\z) |
+          hcl:(?<hcl>\S+)(?:\s+|\z) |
+          ecl:(?<ecl>\S+)(?:\s+|\z) |
+          cid:\S+(?:\s+|\z)
+        )+\z
+      /mx
+
+      RE_VALID = /
+        \A(?:
+          pid:(?<pid>\d{9})(?:\s+|\z) |
+          byr:(?<byr>#{[*1920..2002].join('|')})(?:\s+|\z) |
+          eyr:(?<eyr>#{[*2020..2030].join('|')})(?:\s+|\z) |
+          iyr:(?<iyr>#{[*2010..2020].join('|')})(?:\s+|\z) |
+          hgt:(?<hgt>(?:(?:#{[*59..76].join('|')})in|(?:#{[*150..193].join('|')})cm))(?:\s+|\z) |
+          hcl:(?<hcl>\#\h{6})(?:\s+|\z) |
+          ecl:(?<ecl>amb|blu|brn|gry|grn|hzl|oth)(?:\s+|\z) |
+          cid:\S+(?:\s+|\z)
+        )+\z
+      /mx
+
       def part_one
-        @data.count { _1 in {byr: _, iyr: _, eyr: _, hgt: _, hcl: _, ecl: _, pid: _} }
+        @data
+          .grep(RE_BASE) { Regexp.last_match.named_captures }
+          .count { _1.each_value.none?(&:nil?) }
       end
 
       def part_two
-        @data.count do
-          (_1 in {
-            pid: /^\d{9}$/, byr: /^\d{4}$/, eyr: /^\d{4}$/, iyr: /^\d{4}$/,
-            hgt: /^\d+(in|cm)$/, hcl: /^#\h{6}$/, ecl: 'amb'|'blu'|'brn'|'gry'|'grn'|'hzl'|'oth'
-          }) &&
-            (_1[:byr].to_i in 1920..2002) &&
-            (_1[:iyr].to_i in 2010..2020) &&
-            (_1[:eyr].to_i in 2020..2030) &&
-            (_1[:hgt].split(/(?<=\d)(?=\D)/).then { |qty, u| [qty.to_i, u] } in [150..193, 'cm'] | [59..76, 'in'])
-        end
+        @data
+          .grep(RE_VALID) { Regexp.last_match.named_captures }
+          .count { _1.each_value.none?(&:nil?) }
       end
     end
   end

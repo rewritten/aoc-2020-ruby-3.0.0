@@ -6,26 +6,8 @@ module Aoc
     class D06
       include Aoc::AutoTest
 
-      example part_one: 11, part_two: 6, data: <<~TXT
-        abc
-
-        a
-        b
-        c
-
-        ab
-        ac
-
-        a
-        a
-        a
-        a
-
-        b
-      TXT
-
-      solution part_one: 6457,
-               part_two: 3260
+      solution part_one: 6457
+      solution part_two: 3260
 
       def initialize(data)
         @data = data.split("\n\n")

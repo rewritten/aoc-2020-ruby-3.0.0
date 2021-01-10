@@ -7,8 +7,8 @@ module Aoc
     class D05
       include Aoc::AutoTest
 
-      solution part_one: 816,
-               part_two: 539
+      solution part_one: 816
+      solution part_two: 539
 
       def initialize(data)
         @seats = Set.new(data.each_line) { _1.strip.tr('BFRL', '1010').to_i(2) }
