@@ -26,83 +26,52 @@ module Aoc
 
       def initialize(data)
         @seats = Set.new
+        @cache = Hash.new { |h, k| h[k] = Set.new }
+        @occupied = Set.new
 
-        data.lines.each_with_index do |line, y|
-          line.chars.each_with_index do |char, x|
+        data.each_line.with_index do |line, y|
+          line.each_char.with_index do |char, x|
             @seats << [x, y] if char == 'L'
           end
         end
-
-        @max_x = data.lines.first.strip.size
-        @max_y = data.lines.size
       end
 
       def part_one
-        @cache = populate_by(@seats, &TOUCH)
-        board_ferry(3)
+        populate_by { |(a, b), (c, d)| (a - c).abs <= 1 && (b - d).abs <= 1 }
+        loop until board_ferry(3)
+        @occupied.size
       end
 
       def part_two
-        @cache = populate_by(@seats, &SIGHT)
-        board_ferry(4)
+        populate_by { true }
+        loop until board_ferry(4)
+        @occupied.size
       end
 
       private
 
       def board_ferry(max_nearby_occupation)
-        available = Set.new(@seats)
-        occupied = Set.new
+        to_be_occupied = @seats.select { |seat| @cache[seat].count { @seats.include? _1 } <= max_nearby_occupation }
 
-        loop do
-          incl = available.method(:include?)
-          to_be_occupied = available.select { (@cache[_1]).count(&incl) <= max_nearby_occupation }
-
-          occupied += to_be_occupied
-
-          return occupied.size if to_be_occupied.empty?
-
-          to_be_kept_free = available.select { |seat| @cache[seat].intersect? occupied }
-
-          available -= to_be_kept_free
-          available -= to_be_occupied
-        end
+        to_be_occupied.each do |seat|
+          @seats.subtract(@cache[seat])
+          @occupied.add(seat)
+          @seats.delete(seat)
+        end.empty?
       end
 
-      ROW_FUNS = [:first.to_proc, :last.to_proc, :sum.to_proc, -> { _1.reduce(&:-) }].freeze
-      SIGHT = proc { true }
-      TOUCH = proc { |(a, b), (c, d)| (a - c).abs <= 1 && (b - d).abs <= 1  }
-
-      def populate_by(seats)
-        ROW_FUNS.each_with_object(Hash.new { |h, k| h[k] = Set.new }) do |fun, cache|
-          seats.group_by(&fun).each_value do |row|
+      def populate_by
+        [:first, :last, :sum, -> { _1.reduce(&:-) }]
+          .map { @seats.group_by(&_1) }
+          .reduce(&:chain)
+          .each do |_, row|
             row.sort.each_cons(2) do |x, y|
               next unless yield x, y
 
-              cache[x].add(y)
-              cache[y].add(x)
+              @cache[x].add(y)
+              @cache[y].add(x)
             end
           end
-        end
-      end
-
-      # bench :initialize
-      # bench :populate_by
-      # bench :board_ferry
-
-      def will_occupy(seats, seat)
-        neighbors(seat).count { seats.include? _1 } < 4
-      end
-
-      def will_keep_free(occupied, seat)
-        neighbors(seat).any? { occupied.include? _1 }
-      end
-
-      def neighbors(seat)
-        @neighbours_cache[seat]
-      end
-
-      def visible_neighbours(seat)
-        @visible_neighbours_cache[seat]
       end
     end
   end

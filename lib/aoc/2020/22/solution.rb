@@ -42,31 +42,6 @@ module Aoc
 
       private
 
-      def hand(links, pos, limit = nil)
-        c = links[pos]
-
-        d = []
-
-        until d.include?(c) || d.length == limit
-          d << c
-          c = links[c]
-        end
-
-        d
-      end
-
-      def display(links, pos)
-        puts hand(links, pos).join(' -> ')
-      end
-
-      def links_from(hands)
-        t = []
-        hands.each do |player|
-          player.zip(player.rotate).each { t[_1] = _2 }
-        end
-        t
-      end
-
       def score(deck) = deck.reverse.map.with_index(1) { _1 * _2 }.sum
 
       def combat(hands, recursive: false, nested: false)
