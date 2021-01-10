@@ -69,63 +69,34 @@ module Aoc
 
       def score(deck) = deck.reverse.map.with_index(1) { _1 * _2 }.sum
 
-      def combat(hands, recursive: false)
-        return [1, []] if recursive && hands[0].max > [hands[1].max, hands.flatten.length].max
+      def combat(hands, recursive: false, nested: false)
+        return [0, []] if recursive && nested && shortcut(hands)
 
         seen = Set.new
 
-        len1, len2 = hands.map(&:length)
-        left, right = hands.map(&:last)
-
-        links = links_from(hands)
-
         loop do
-          break [1, left] unless seen.add? links.hash
-          play1 = links[left]
-          play2 = links[right]
-          next1 = links[play1]
-          next2 = links[play2]
+          return [0, hands[0]] unless seen.add? hands.hash
 
-          result =
-            if recursive && play1 < len1 && play2 < len2
-              hand1 = hand(links, play1, play1)
-              hand2 = hand(links, play2, play2)
-              combat([hand1, hand2], recursive: true).first
-            else
-              play1 > play2 ? 1 : 2
-            end
+          apply(hands, compare(hands, recursive: recursive))
 
-          if result == 1
-            links[left] = play1
-            links[play1] = play2
-            links[play2] = next1
-
-            left = play2
-
-            len1 += 1
-            len2 -= 1
-
-            break [1, left] if len2.zero?
-
-            links[right] = next2
-          else
-            links[right] = play2
-            links[play2] = play1
-            links[play1] = next2
-
-            right = play1
-
-            len2 += 1
-            len1 -= 1
-
-            break [2, right] if len1.zero?
-
-            links[left] = next1
-          end
-        end => [player, pos]
-
-        [player, hand(links, pos)]
+          return [0, hands[0]] if hands[1].empty?
+          return [1, hands[1]] if hands[0].empty?
+        end
       end
+
+      def compare(hands, recursive: false)
+        if recursive && hands.all? { _1.first < _1.size }
+          combat(hands.map { _1[1.._1.first] }, recursive: true, nested: true).first
+        else
+          hands[0].first > hands[1].first ? 0 : 1
+        end
+      end
+
+      def apply(hands, result)
+        hands[result] << hands[result].shift << hands[1 - result].shift
+      end
+
+      def shortcut(hands) = hands[0].max > [hands[1].max, hands.flatten.length - 2].max
     end
   end
 end
