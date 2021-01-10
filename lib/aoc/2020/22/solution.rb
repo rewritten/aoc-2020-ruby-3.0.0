@@ -55,7 +55,6 @@ module Aoc
         d
       end
 
-
       def display(links, pos)
         puts hand(links, pos).join(' -> ')
       end
@@ -71,6 +70,8 @@ module Aoc
       def score(deck) = deck.reverse.map.with_index(1) { _1 * _2 }.sum
 
       def combat(hands, recursive: false)
+        return [1, []] if recursive && hands[0].max > [hands[1].max, hands.flatten.length].max
+
         seen = Set.new
 
         len1, len2 = hands.map(&:length)
