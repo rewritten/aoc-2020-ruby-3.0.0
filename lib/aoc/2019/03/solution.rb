@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'set'
 require 'aoc/auto_test'
 
 module Aoc
@@ -7,7 +8,7 @@ module Aoc
     class D03
       include Aoc::AutoTest
 
-      example part_one: 159, data: <<~DATA
+      example part_one: 159, part_two: 610, data: <<~DATA
         R75,D30,R83,U83,L12,D49,R71,U7,L72
         U62,R66,U55,R34,D71,R55,D58,R83
       DATA
@@ -18,63 +19,95 @@ module Aoc
       DATA
 
       solution part_one: 896
-      #          part_two: 42
+      solution part_two: 16_524
 
       def initialize(data)
-        @data = data.lines.map { |line| to_pieces(line.strip.split(',')) }
+        @data = data.lines.map { _1.strip.split(',') }
       end
 
       def part_one
-        this_wire, other_wire = @data
-
-        this_wire.flat_map { |piece| other_wire.map { |other_piece| cross?(piece, other_piece) } }
-                 .compact
-                 .map { |x, y| x.abs + y.abs }
-                 .sort
-                 .reject(&:zero?)
-                 .first
+        crossings.map { |x, y| x.abs + y.abs }.sort.reject(&:zero?).first
       end
 
       def part_two
-        :t
+        visited = Hash.new { |h, k| h[k] = [] }
+
+        best = 10 << 100
+
+        wires = @data.map { to_enumerator _1 }
+
+        (1..).zip(*wires) do |turn, pin0, pin1|
+          break best unless pin0 || pin1
+          break best if turn > best
+
+          visited[pin0][0] ||= turn
+          best = best.clamp(..visited[pin0].sum) if visited[pin0][1]
+
+          visited[pin1][1] ||= turn
+          best = best.clamp(..visited[pin1].sum) if visited[pin1][0]
+        end
       end
 
       private
 
+      def crossings
+        this_wire, other_wire = @data.map { to_pieces _1 }
+
+        this_wire.flat_map { |piece| other_wire.map { |other_piece| cross?(piece, other_piece) } }
+                 .compact
+      end
+
       def to_pieces(directions_ary) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-        pieces = []
         last_pos = [0, 0]
-        directions_ary.each do |direction|
+        directions_ary.map do |direction|
           len = direction[1..].to_i
-          next_pos =
+          next_pos, piece =
             case direction[0]
             when 'R'
-              [last_pos[0] + len, last_pos[1]]
+              [[last_pos[0] + len, last_pos[1]],
+               [Range.new(last_pos[0], last_pos[0] + len), Range.new(last_pos[1], last_pos[1])]]
             when 'L'
-              [last_pos[0] - len, last_pos[1]]
+              [[last_pos[0] - len, last_pos[1]],
+               [Range.new(last_pos[0] - len, last_pos[0]), Range.new(last_pos[1], last_pos[1])]]
             when 'U'
-              [last_pos[0], last_pos[1] + len]
+              [[last_pos[0], last_pos[1] + len],
+               [Range.new(last_pos[0], last_pos[0]), Range.new(last_pos[1], last_pos[1] + len)]]
             when 'D'
-              [last_pos[0], last_pos[1] - len]
+              [[last_pos[0], last_pos[1] - len],
+               [Range.new(last_pos[0], last_pos[0]), Range.new(last_pos[1] - len, last_pos[1])]]
             end
-          pieces << [last_pos, next_pos].sort
           last_pos = next_pos
+          piece
         end
+      end
 
-        pieces
+      STEP = {
+        'R' => ->(pos) { [pos[0] + 1, pos[1]] },
+        'L' => ->(pos) { [pos[0] - 1, pos[1]] },
+        'U' => ->(pos) { [pos[0], pos[1] + 1] },
+        'D' => ->(pos) { [pos[0], pos[1] - 1] }
+      }.freeze
+
+      def to_enumerator(directions_ary)
+        Enumerator.new do |y|
+          pos = [0, 0]
+          directions_ary.each do |direction|
+            step = STEP[direction[0]]
+            direction[1..].to_i.times do
+              y << pos = step.call(pos)
+            end
+          end
+        end
       end
 
       # returns a point (x, y) when the two pieces cross
-      def cross?(this, other) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
-        if this.first.last == this.last.last && other.first.last != other.last.last &&
-           other.first.first.between?(this.first.first, this.last.first) &&
-           this.last.last.between?(other.first.last, other.last.last)
-          [other.first.first, this.last.last]
-        elsif this.first.last != this.last.last && other.first.last == other.last.last &&
-              this.first.first.between?(other.first.first, other.last.first) &&
-              other.last.last.between?(this.first.last, this.last.last)
-          [this.first.first, other.last.last]
-        end
+      def cross?(piece_a, piece_b)
+        return cross_h_v(piece_a, piece_b) if piece_a.last.size == 1 && piece_b.last.size > 1
+        return cross_h_v(piece_b, piece_a) if piece_b.last.size == 1 && piece_a.last.size > 1
+      end
+
+      def cross_h_v(hor, ver)
+        [ver.first.begin, hor.last.end] if hor.first.cover?(ver.first.begin) && ver.last.cover?(hor.last.end)
       end
     end
   end
