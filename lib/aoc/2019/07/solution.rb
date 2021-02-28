@@ -21,7 +21,7 @@ module Aoc
 
       def part_one
         [*0..4].permutation.max_by do |inputs|
-          computers = 5.times { Computer.run(@data) }
+          computers = Array.new(5) { Computer.run(@data) }
           computers.zip(inputs).each { _1.send _2 }
 
           computers.each_cons(2) do |l, r|
