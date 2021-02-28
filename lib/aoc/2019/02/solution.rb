@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'aoc/auto_test'
+require_relative '../computer'
 
 module Aoc
   module Y2019
@@ -15,40 +16,17 @@ module Aoc
       end
 
       def part_one
-        pos = 0
         @data[1..2] = 1202.divmod 100
 
-        pos = step(pos) while pos
-
-        @data[0]
+        r = Computer.run(@data)
+        r.take
       end
 
       def part_two
-        @original = @data
-
         (0...10_000).each do |ans|
-          @data = [*@original]
-          pos = 0
           @data[1..2] = ans.divmod 100
-
-          pos = step(pos) while pos
-
-          return ans if @data[0] == 19_690_720
-        end
-      end
-
-      private
-
-      def step(pos) # rubocop:disable Metrics/AbcSize
-        case @data[pos]
-        when 1 # add
-          @data[@data[pos + 3]] = @data[@data[pos + 1]] + @data[@data[pos + 2]]
-          pos + 4
-        when 2 # multiply
-          @data[@data[pos + 3]] = @data[@data[pos + 1]] * @data[@data[pos + 2]]
-          pos + 4
-        when 99 # halt
-          nil
+          r = Computer.run(@data)
+          return ans if r.take == 19_690_720
         end
       end
     end
