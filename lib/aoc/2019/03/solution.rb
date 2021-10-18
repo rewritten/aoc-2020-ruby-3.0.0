@@ -57,7 +57,7 @@ module Aoc
                  .compact
       end
 
-      def to_pieces(directions_ary) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def to_pieces(directions_ary)
         last_pos = [0, 0]
         directions_ary.map do |direction|
           len = direction[1..].to_i

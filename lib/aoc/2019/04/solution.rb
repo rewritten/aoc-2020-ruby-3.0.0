@@ -29,7 +29,7 @@ module Aoc
         passwords_enumerator.count { _1 in [*, a, ^a, *] }
       end
 
-      def part_two # rubocop:disable Metrics/MethodLength
+      def part_two
         passwords_enumerator.count do
           case _1
           in [*, _a, ^_a, ^_a, ^_a, ^_a, *]
@@ -53,7 +53,7 @@ module Aoc
 
       private
 
-      def passwords_enumerator # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def passwords_enumerator
         Enumerator.new do |y|
           current = @min
           loop do
