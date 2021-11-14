@@ -5,7 +5,7 @@ require_relative '../computer'
 
 module Aoc
   module Y2019
-    class D05 # rubocop:disable Style/Documentation
+    class D05
       include Aoc::AutoTest
 
       solution part_one: 7_839_346

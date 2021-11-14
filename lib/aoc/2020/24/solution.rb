@@ -46,7 +46,7 @@ module Aoc
 
       private
 
-      def proceed # rubocop:disable Metrics/AbcSize
+      def proceed
         @blacks
           .flat_map { [[_1 + 2, _2], [_1 + 1, _2 + 1], [_1 - 1, _2 + 1], [_1 - 2, _2], [_1 + 1, _2 - 1], [_1 - 1, _2 - 1]] } # rubocop:disable Layout/LineLength
           .tally

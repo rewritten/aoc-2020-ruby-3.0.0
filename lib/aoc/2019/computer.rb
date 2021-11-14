@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Computer
   def self.run(data)
     Ractor.new(data) do |data|

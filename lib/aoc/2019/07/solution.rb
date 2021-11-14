@@ -34,8 +34,7 @@ module Aoc
         end.join
       end
 
-      def part_two
-      end
+      def part_two; end
     end
   end
 end
