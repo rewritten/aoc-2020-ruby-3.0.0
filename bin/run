@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# USAGE: `bin/run 2021 23`
+
+padded_day=`printf %02d $2`
+
+rake test TEST=lib/aoc/$1/$padded_day/solution.rb

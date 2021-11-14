@@ -22,32 +22,30 @@ module Aoc
       solution part_two: 14_110_788
 
       def initialize(data)
-        @data = data.lines.map(&:chomp).map do |line|
-          line.match(RE).captures => [action, start_x, start_y, end_x, end_y]
-          [action, start_x.to_i, start_y.to_i, end_x.to_i, end_y.to_i]
-        end
+        @data = data.lines.map(&:chomp).map { _1.match(RE).captures }
       end
 
       def part_one
         grid = Array.new(1000) { Array.new(1000, 0) }
 
-        @data.each do |action, start_x, start_y, end_x, end_y|
+        @data.each do |action, *coords|
+          coords.map(&:to_i) => [start_x, start_y, end_x, end_y]
           case action
           when 'turn on'
-            (start_x..end_x).each do |x|
-              (start_y..end_y).each do |y|
+            start_x.upto(end_x) do |x|
+              start_y.upto(end_y) do |y|
                 grid[x][y] = 1
               end
             end
           when 'turn off'
-            (start_x..end_x).each do |x|
-              (start_y..end_y).each do |y|
+            start_x.upto(end_x) do |x|
+              start_y.upto(end_y) do |y|
                 grid[x][y] = 0
               end
             end
           when 'toggle'
-            (start_x..end_x).each do |x|
-              (start_y..end_y).each do |y|
+            start_x.upto(end_x) do |x|
+              start_y.upto(end_y) do |y|
                 grid[x][y] = 1 - grid[x][y]
               end
             end
@@ -60,23 +58,24 @@ module Aoc
       def part_two
         grid = Array.new(1000) { Array.new(1000, 0) }
 
-        @data.each do |action, start_x, start_y, end_x, end_y|
+        @data.each do |action, *coords|
+          coords.map(&:to_i) => [start_x, start_y, end_x, end_y]
           case action
           when 'turn on'
-            (start_x..end_x).each do |x|
-              (start_y..end_y).each do |y|
+            start_x.upto(end_x) do |x|
+              start_y.upto(end_y) do |y|
                 grid[x][y] += 1
               end
             end
           when 'turn off'
-            (start_x..end_x).each do |x|
-              (start_y..end_y).each do |y|
+            start_x.upto(end_x) do |x|
+              start_y.upto(end_y) do |y|
                 grid[x][y] -= 1 if grid[x][y].positive?
               end
             end
           when 'toggle'
-            (start_x..end_x).each do |x|
-              (start_y..end_y).each do |y|
+            start_x.upto(end_x) do |x|
+              start_y.upto(end_y) do |y|
                 grid[x][y] += 2
               end
             end
