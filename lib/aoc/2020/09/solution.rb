@@ -7,11 +7,6 @@ module Aoc
     class D09
       include Aoc::AutoTest
 
-      example part_one: 127,
-              part_two: 62,
-              opts: { buffer: 5 },
-              data: '35 20 15 25 47 40 62 55 65 95 102 117 150 182 127 219 299 277 309 576'
-
       solution part_one: 10_884_537,
                part_two: 1_261_309
 

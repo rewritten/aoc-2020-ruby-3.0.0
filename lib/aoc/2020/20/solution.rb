@@ -14,8 +14,6 @@ module Aoc
         [1, 2], [4, 2], [7, 2], [10, 2], [13, 2], [16, 2]
       ].freeze
 
-      example part_one: 20_899_048_083_289, part_two: 273, data: File.read("#{__dir__}/example.txt")
-
       solution part_one: 29_293_767_579_581, part_two: 1989
 
       def initialize(data, map: nil)

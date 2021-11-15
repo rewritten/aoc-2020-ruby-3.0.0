@@ -1,4 +1,4 @@
-#! env ruby
+#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 # Aoc::Y2020::D17::Test#test_example_part_one_is_112 = 0.01 s = .

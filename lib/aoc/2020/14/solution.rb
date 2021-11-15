@@ -7,20 +7,6 @@ module Aoc
     class D14
       include Aoc::AutoTest
 
-      example part_one: 165, data: <<~TXT
-        mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-        mem[8] = 11
-        mem[7] = 101
-        mem[8] = 0
-      TXT
-
-      example part_two: 208, data: <<~TXT
-        mask = 000000000000000000000000000000X1001X
-        mem[42] = 100
-        mask = 00000000000000000000000000000000X0XX
-        mem[26] = 1
-      TXT
-
       solution part_one: 14_553_106_347_726,
                part_two: 2_737_766_154_126
 

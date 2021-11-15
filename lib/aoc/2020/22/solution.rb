@@ -7,22 +7,6 @@ module Aoc
     class D22
       include Aoc::AutoTest
 
-      example part_one: 306, part_two: 291, data: <<~TEXT
-        Player 1:
-        9
-        2
-        6
-        3
-        1
-
-        Player 2:
-        5
-        8
-        4
-        7
-        10
-      TEXT
-
       solution part_one: 31_308
       solution part_two: 33_647
 

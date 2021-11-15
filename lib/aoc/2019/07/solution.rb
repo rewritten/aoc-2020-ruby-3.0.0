@@ -8,7 +8,7 @@ module Aoc
     class D07
       include Aoc::AutoTest
 
-      example part_one: '43210', data: '3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0'
+      # example part_one: '43210', data: '3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0'
       #         part_two: 2345,
       #         data: '...'
 

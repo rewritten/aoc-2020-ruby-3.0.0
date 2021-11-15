@@ -8,13 +8,6 @@ module Aoc
     class D19
       include Aoc::AutoTest
 
-      example part_one: 2, data: File.read("#{__dir__}/example.txt")
-
-      example part_one: 3, part_two: 12,
-              opts: { cache_start: [42, 31] },
-              label: 'example_with_partial_cache',
-              data: File.read("#{__dir__}/example_three.txt")
-
       solution part_one: 250, opts: { cache_start: [42, 31] }
       solution part_two: 359, opts: { cache_start: [42, 31] }
 

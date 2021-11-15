@@ -8,12 +8,6 @@ module Aoc
     class D17
       include Aoc::AutoTest
 
-      example part_one: 112, part_two: 848, data: <<~TEXT
-        .#.
-        ..#
-        ###
-      TEXT
-
       solution part_one: 324
       solution part_two: 1836
 

@@ -8,19 +8,6 @@ module Aoc
     class D11
       include Aoc::AutoTest
 
-      example part_one: 37, part_two: 26, data: <<~TXT
-        L.LL.LL.LL
-        LLLLLLL.LL
-        L.L.L..L..
-        LLLL.LL.LL
-        L.LL.LL.LL
-        L.LLLLL.LL
-        ..L.L.....
-        LLLLLLLLLL
-        L.LLLLLL.L
-        L.LLLLL.LL
-      TXT
-
       solution part_one: 2108
       solution part_two: 1897
 

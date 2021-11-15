@@ -7,8 +7,6 @@ module Aoc
     class D12
       include Aoc::AutoTest
 
-      example part_one: 25, part_two: 286, data: 'F10 N3 F7 R90 F11'
-
       solution part_one: 1687,
                part_two: 20_873
 

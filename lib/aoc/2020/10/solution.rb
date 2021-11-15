@@ -7,8 +7,6 @@ module Aoc
     class D10
       include Aoc::AutoTest
 
-      example part_one: 35, part_two: 8, data: '16 10 15 5 1 11 7 19 6 12 4'
-
       solution part_one: 2400,
                part_two: 338_510_590_509_056
 

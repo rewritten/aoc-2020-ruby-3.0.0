@@ -8,13 +8,6 @@ module Aoc
     class D21
       include Aoc::AutoTest
 
-      example part_one: 5, part_two: 'mxmxvkd,sqjhc,fvjkl', data: <<~TEXT
-        mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
-        trh fvjkl sbzzf mxmxvkd (contains dairy)
-        sqjhc fvjkl (contains soy)
-        sqjhc mxmxvkd sbzzf (contains fish)
-      TEXT
-
       solution part_one: 2098, part_two: 'ppdplc,gkcplx,ktlh,msfmt,dqsbql,mvqkdj,ggsz,hbhsx'
 
       def initialize(data)
